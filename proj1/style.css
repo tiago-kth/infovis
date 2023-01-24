@@ -55,3 +55,9 @@
     height: 400px;
 
 }
+
+circle.data-point {
+    r: 3;
+
+    transition: transform 1s;
+}

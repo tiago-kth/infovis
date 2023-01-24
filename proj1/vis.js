@@ -14,6 +14,16 @@ function init() {
 
             const chart = new Chart(data);
 
+            console.log(chart.ref);
+
+            const bubbles = data.main_data.map((datum, i) => {
+                return new Bubble(datum, i, chart);
+            });
+
+            console.log(bubbles);
+
+            bubbles.forEach(bubble => bubble.update_position(['infovis']))
+
         }
     )
 
@@ -65,6 +75,55 @@ class Controls {
         }
 
 
+
+    }
+
+}
+
+class Bubble {
+
+    datum;
+
+    chart_ref;
+
+    ref;
+
+    constructor(datum, i, chart) {
+
+        this.datum = datum;
+
+        const svg = chart.ref;
+
+        this.chart_ref = chart;
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', 0);
+        circle.setAttribute('cy', 0);
+        circle.classList.add('data-point');
+        circle.dataset.id = i;
+
+        this.ref = circle;
+
+        console.log(datum, svg, circle);
+
+        svg.appendChild(circle); 
+
+    }
+
+    update_position(skills) {
+
+        const datum = this.datum;
+
+        if (skills.length == 1) {
+
+            const skill = skills[0];
+
+            console.log(this.chart_ref.x_hist(datum['rank_' + skill]));
+
+            this.ref.setAttribute('transform', `translate(${this.chart_ref.x_hist(datum['rank_' + skill])},${this.chart_ref.y_hist(datum[skill])})`)
+
+
+        }
 
     }
 
