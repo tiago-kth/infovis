@@ -69,12 +69,18 @@ for (skill in data_avg_skills$skills) {
   
 }
 
+max_ranks <- data_with_positions %>%
+  select(contains('rank_')) %>%
+  gather(key, value)
+
+max_rank = max(max_ranks$value)
 
 # export ------------------------------------------------------------------
 
 output <- list(
   main_data = data_with_positions,
-  averages = data_avg_skills
+  averages = data_avg_skills,
+  max_rank = max_rank
 )
 
 jsonlite::write_json(output, '../data.json')  
