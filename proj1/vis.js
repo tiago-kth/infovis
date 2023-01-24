@@ -10,6 +10,8 @@ function init() {
 
             console.log(skills);
 
+            skills_selected = [''];
+
             const controls = new Controls(skills);
 
             const chart = new Chart(data);
@@ -22,7 +24,6 @@ function init() {
 
             console.log(bubbles);
 
-            bubbles.forEach(bubble => bubble.update_position(['infovis']))
 
         }
     )
@@ -72,6 +73,12 @@ class Controls {
 
             console.log(`skill clicada: ${clicked_skill}`);
 
+            skills_selected[0] = clicked_skill;
+
+            console.log(skills_selected);
+
+            bubbles.forEach(bubble => bubble.update_position(skills_selected))
+
         }
 
 
@@ -118,7 +125,7 @@ class Bubble {
 
             const skill = skills[0];
 
-            console.log(this.chart_ref.x_hist(datum['rank_' + skill]));
+            //console.log(this.chart_ref.x_hist(datum['rank_' + skill]));
 
             this.ref.setAttribute('transform', `translate(${this.chart_ref.x_hist(datum['rank_' + skill])},${this.chart_ref.y_hist(datum[skill])})`)
 
