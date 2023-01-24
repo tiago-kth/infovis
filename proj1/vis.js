@@ -12,6 +12,8 @@ function init() {
 
             const controls = new Controls(skills);
 
+            const chart = new Chart(data);
+
         }
     )
 
@@ -63,6 +65,55 @@ class Controls {
         }
 
 
+
+    }
+
+}
+
+class Chart {
+
+    w;
+    h;
+
+    margin = 20;
+
+    x_hist;
+    y_hist;
+
+    data_params = {
+        max_rank : null
+    }
+
+
+
+    ref = document.querySelector('.vis');
+
+    cont = document.querySelector('.vis-container');
+
+    constructor(data) {
+
+        this.data_params.max_rank = data.max_rank;
+
+        this.make_scales();
+
+        console.log(this.w, this.h);
+        console.log(this.x_hist(10));
+
+    }
+
+    get_sizes() {
+
+        this.w = +window.getComputedStyle(this.cont).width.slice(0,-2);
+        this.h = +window.getComputedStyle(this.cont).height.slice(0,-2);
+
+    }
+
+    make_scales() {
+
+        this.get_sizes();
+
+        this.x_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin, this.w / 2]);
+        this.y_hist = d3.scaleLinear().domain([0,10]).range([this.h/2, this.margin]);
 
     }
 
