@@ -28,4 +28,29 @@
     font-size: 1.1rem;
 
     background-color: ghostwhite;
+
+    transition: all .2s;
+}
+
+.skill-button.active {
+
+    border-color: crimson;
+    background-color: lightpink;
+    box-shadow: 0px 0px 0px 2px crimson;
+
+}
+
+/* -- vis ---- */
+
+.vis-container {
+
+    border: 4px dotted #333;
+
+}
+
+.vis {
+
+    background-color: whitesmoke;
+    width: 100%;
+
 }
