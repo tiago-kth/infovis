@@ -1,6 +1,8 @@
 function init() {
 
-    fetch('data.json').then(response => response.json()).then(
+    fetch('data.json')
+      .then(response => response.json())
+      .then(
 
         data => {
             
@@ -48,6 +50,9 @@ init();
 class Controls {
 
     ref = document.querySelector('.skills-container');
+    ref_radio = document.querySelector('.control-type');
+
+    selection_type = 'one';
 
     bubbles;
 
@@ -77,6 +82,7 @@ class Controls {
     monitor() {
 
         this.ref.addEventListener('click', e => this.on_click(e, this.bubbles));
+        this.ref_radio.addEventListener('change', this.radio_change);
 
     }
 
@@ -103,6 +109,12 @@ class Controls {
         }
 
 
+
+    }
+
+    radio_change(e) {
+
+        this.selection_type = e.target.value;
 
     }
 

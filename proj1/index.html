@@ -19,11 +19,33 @@
 
         <div class="controls">
 
-            <h2>
-                Select skill to compare
-            </h2>
+            <h2>Please select how you want to compare:</h2>
+
+            <div class="control-type">
+
+                <div>
+                    <input type="radio" id="radio-one" name="control-type" value="one"
+                            checked>
+                    <label for="radio-one">One skill at a time</label>
+                </div>
+            
+                <div>
+                    <input type="radio" id="radio-two" name="control-type" value="two">
+                    <label for="radio-two">Two skills at a time</label>
+                </div>
+            
+                <div>
+                    <input type="radio" id="radio-any" name="control-type" value="any">
+                    <label for="any">Any number of skills</label>
+                </div>
+                
+            </div>
+
+            <h2>Select the skills</h2>
 
             <div class="skills-container">
+
+                
 
                 <!-- 
                     populated by JS
@@ -44,6 +66,7 @@
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="vis.js"></script>
+
     
 </body>
 </html>
