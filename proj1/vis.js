@@ -12,10 +12,6 @@ function init() {
 
             console.log(skills);
 
-            skills_selected = [''];
-
-            
-
             const chart = new Chart(data);
             const bubbles = new Bubbles(chart, data.main_data);
             const controls = new Controls(skills, bubbles);
@@ -81,30 +77,36 @@ class Controls {
 
     monitor() {
 
-        this.ref.addEventListener('click', e => this.on_click(e, this.bubbles));
+        this.ref.addEventListener('click', e => this.on_click(e, this.bubbles, this.selection_type, this.ref));
         this.ref_radio.addEventListener('change', this.radio_change);
 
     }
 
-    on_click(e, bubbles) {
+    on_click(e, bubbles, selection_type, skillsContainer) {
 
-        console.log(bubbles);
+        console.log(bubbles, selection_type, skillsContainer);
 
         if (e.target.tagName == 'BUTTON') {
 
             const clicked_btn = e.target;
 
-            clicked_btn.classList.toggle('active');
-
             const clicked_skill = clicked_btn.dataset.name;
 
             console.log(`skill clicada: ${clicked_skill}`);
 
-            skills_selected[0] = clicked_skill;
+            if (selection_type == 'one') {
 
-            console.log(skills_selected);
+                Array.from(skillsContainer.children).forEach(skill_btn => skill_btn.classList.remove('active'));
+                clicked_btn.classList.toggle('active');
 
-            bubbles.move_bubbles(skills_selected);
+                bubbles.skills_selected = [] 
+                bubbles.skills_selected[0] = clicked_skill;
+
+            }
+
+            console.log(bubbles.skills_selected);
+
+            bubbles.move_bubbles(bubbles.skills_selected);
 
         }
 
@@ -174,6 +176,8 @@ class Bubbles {
 
     ref;
     chart_ref;
+
+    skills_selected = [];
 
     constructor(chart, data) {
 
