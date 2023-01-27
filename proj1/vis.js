@@ -170,6 +170,7 @@ class Bubbles {
               .attr('data-id', (d,i) => i)
               .attr('cx', 0)
               .attr('cy', 0)
+              .attr('r', chart.r)
             ;
 
         this.chart_ref = chart;
@@ -201,7 +202,10 @@ class Chart {
     w;
     h;
 
+    r = 10;
+
     margin = 20;
+    gap = 2;
 
     x_hist;
     y_hist;
@@ -238,8 +242,8 @@ class Chart {
 
         this.get_sizes();
 
-        this.x_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin, this.w / 2]);
-        this.y_hist = d3.scaleLinear().domain([0,10]).range([this.h/2, this.margin]);
+        this.x_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin, this.data_params.max_rank * this.r * 2 + (this.data_params.max_rank - 1) * this.gap]);
+        this.y_hist = d3.scaleLinear().domain([1,10]).range([10 * this.r * 2 + 9 * this.gap, this.margin]);
 
     }
 
