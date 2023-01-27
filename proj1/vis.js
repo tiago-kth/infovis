@@ -12,15 +12,28 @@ function init() {
 
             skills_selected = [''];
 
-            const controls = new Controls(skills);
+            
 
             const chart = new Chart(data);
+            const bubbles = new Bubbles(chart, data.main_data);
+            const controls = new Controls(skills, bubbles);
 
             console.log(chart.ref);
 
+            /*
             const bubbles = data.main_data.map((datum, i) => {
                 return new Bubble(datum, i, chart);
             });
+            */
+
+            // const bubbles = d3.select('.vis').selectAll('circle').data(data.main_data).join('circle')
+            //   .classed('data-point', true)
+            //   .attr('data-id', (d,i) => i)
+            //   .attr('cx', 0)
+            //   .attr('cy', 0)
+            // ;
+
+
 
             console.log(bubbles);
 
@@ -36,9 +49,15 @@ class Controls {
 
     ref = document.querySelector('.skills-container');
 
-    constructor(skills) {
+    bubbles;
+
+    chart;
+
+    constructor(skills, bubbles) {
 
         const cont = this.ref;
+        this.bubbles = bubbles;
+        this.chart = bubbles.chart_ref;
 
         skills.forEach(skill => {
 
@@ -57,11 +76,13 @@ class Controls {
 
     monitor() {
 
-        this.ref.addEventListener('click', this.on_click);
+        this.ref.addEventListener('click', e => this.on_click(e, this.bubbles));
 
     }
 
-    on_click(e) {
+    on_click(e, bubbles) {
+
+        console.log(bubbles);
 
         if (e.target.tagName == 'BUTTON') {
 
@@ -77,7 +98,7 @@ class Controls {
 
             console.log(skills_selected);
 
-            bubbles.forEach(bubble => bubble.update_position(skills_selected))
+            bubbles.move_bubbles(skills_selected);
 
         }
 
@@ -87,6 +108,7 @@ class Controls {
 
 }
 
+/*
 class Bubble {
 
     datum;
@@ -133,6 +155,44 @@ class Bubble {
         }
 
     }
+
+}*/
+
+class Bubbles {
+
+    ref;
+    chart_ref;
+
+    constructor(chart, data) {
+
+        this.ref = d3.select('.vis').selectAll('circle').data(data).join('circle')
+              .classed('data-point', true)
+              .attr('data-id', (d,i) => i)
+              .attr('cx', 0)
+              .attr('cy', 0)
+            ;
+
+        this.chart_ref = chart;
+
+    }
+
+    move_bubbles(skills) {
+
+        if (skills.length == 1) {
+
+            const skill = skills[0];
+
+            this.ref
+            .attr('transform', d => `translate(
+                ${this.chart_ref.x_hist(d['rank_' + skill])},
+                ${this.chart_ref.y_hist(d[skill])})`
+            )
+
+        }
+        
+    }
+
+
 
 }
 
