@@ -191,15 +191,19 @@ class Bubbles {
 
     constructor(chart, data) {
 
-        this.ref = d3.select('.vis').selectAll('circle').data(data).join('circle')
+        this.ref = d3.select('.vis').selectAll('path.data-point').data(data).join('path')
               .classed('data-point', true)
               .attr('data-id', (d,i) => i)
-              .attr('cx', 0)
-              .attr('cy', 0)
-              .attr('r', chart.r)
+              .attr('d', this.generate_path(chart.r))
             ;
 
         this.chart_ref = chart;
+
+    }
+
+    generate_path(r) {
+
+        return `M-${r},0A${r},${r},0,1,1,${r},0A${r},${r},0,1,1,-${r},0Z`
 
     }
 

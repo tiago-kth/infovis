@@ -56,7 +56,7 @@
 
 }
 
-circle.data-point {
+.data-point {
 
     transition: transform .5s;
 }
