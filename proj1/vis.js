@@ -215,8 +215,8 @@ class Bubbles {
 
         skills.forEach( (skill, i) => {
 
-            const x = this.chart_ref.x_pc(skill);
-            const y = this.chart_ref.y(data_point[skill]) - gap;
+            const x = this.chart_ref.x_pc(skill).toPrecision(4);
+            const y = (this.chart_ref.y(data_point[skill]) - gap).toPrecision(4);
 
             const command = i == 0 ? 'M' : 'L';
 
@@ -226,8 +226,8 @@ class Bubbles {
 
         skills.reverse().forEach( skill => {
 
-            const x = this.chart_ref.x_pc(skill);
-            const y = this.chart_ref.y(data_point[skill]) + gap;
+            const x = this.chart_ref.x_pc(skill).toPrecision(4);
+            const y = (this.chart_ref.y(data_point[skill]) + gap).toPrecision(4);
 
             d += `L${x},${y} `;
 
