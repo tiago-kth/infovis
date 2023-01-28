@@ -193,6 +193,7 @@ class Bubbles {
 
         this.ref = d3.select('.vis').selectAll('path.data-point').data(data).join('path')
               .classed('data-point', true)
+              .classed('animate', true)
               .attr('data-id', (d,i) => i)
               .attr('data-alias', d => d.alias)
               .attr('d', this.generate_path_circle(chart.r))
@@ -271,27 +272,66 @@ class Bubbles {
 
         if (skills.length == 2) {
 
-            if (this.chart_ref.chart_mode != 'scatter') {
+            if (this.chart_ref.chart_mode == 'paralells coordinates' ) {
 
                 this.chart_ref.chart_mode = 'scatter';
                 this.chart_ref.update_axis();
 
+                const d = this.generate_path_circle(this.chart_ref.r)
+
+                this.ref
+                  .transition()
+                  .duration(500)
+                  .attr('transform', d => `translate( 
+                    ${this.chart_ref.x_scatter(d[skills[0]])},
+                    ${this.chart_ref.y(d[skills[1]])})`
+                   ) // this is repeated here to make the transition smoother.
+                  .attrTween('d', data_point => {
+                    
+                    const current_path = d3.select(`[data-alias="${data_point.alias}"]`).node().getAttribute('d');
+                    const next_path = d;
+
+                    return flubber.interpolate(
+                        current_path,
+                        next_path
+                    )
+                   })
+                ;
+
             }
 
-            this.ref
-            .attr('transform', d => `translate(
-                ${this.chart_ref.x_scatter(d[skills[0]])},
-                ${this.chart_ref.y(d[skills[1]])})`
-            )
+            else {
+
+                if (this.chart_ref.chart_mode == 'histogram') {
+
+                    this.chart_ref.chart_mode = 'scatter';
+                    this.chart_ref.update_axis();
+    
+                }
+
+                this.ref
+                    .classed('animate', true)
+                    .attr('transform', d => `translate(
+                        ${this.chart_ref.x_scatter(d[skills[0]])},
+                        ${this.chart_ref.y(d[skills[1]])})`
+                    )
+                ;
+
+            }
+
         }
 
         if (skills.length > 2) {
 
+            this.chart_ref.chart_mode = 'paralells coordinates' ;
+
             this.chart_ref.update_scale_pc(skills);
 
             this.ref
+              .classed('animate', false)            
               .transition()
               .duration(500)
+              .attr('transform', 'translate(0,0)') // out of the transition chain, because it uses css animation
               .attrTween('d', data_point => {
 
                 const current_path = d3.select(`[data-alias="${data_point.alias}"]`).node().getAttribute('d');
@@ -305,7 +345,6 @@ class Bubbles {
                 )
 
               })
-              .attr('transform', 'translate(0,0)')
             ;
 
 

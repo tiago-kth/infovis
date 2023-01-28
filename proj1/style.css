@@ -56,7 +56,7 @@
 
 }
 
-.data-point {
+.data-point.animate {
 
     transition: transform .5s;
 }
