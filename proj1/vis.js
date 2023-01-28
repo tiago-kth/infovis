@@ -49,6 +49,7 @@ class Controls {
     ref_radio = document.querySelector('.control-type');
 
     selection_type = 'one';
+    skills_selected = [];
 
     bubbles;
 
@@ -77,14 +78,19 @@ class Controls {
 
     monitor() {
 
-        this.ref.addEventListener('click', e => this.on_click(e, this.bubbles, this.selection_type, this.ref));
-        this.ref_radio.addEventListener('change', this.radio_change);
+        this.ref.addEventListener('click', e => this.on_click(e, this));
+        this.ref_radio.addEventListener('change', e => this.radio_change(e, this));
 
     }
 
-    on_click(e, bubbles, selection_type, skillsContainer) {
+    on_click(e, controls) {
 
-        console.log(bubbles, selection_type, skillsContainer);
+
+        console.log(controls.selection_type);
+
+        const selection_type = controls.selection_type;
+        const skillsContainer = controls.ref;
+        const bubbles = controls.bubbles;
 
         if (e.target.tagName == 'BUTTON') {
 
@@ -96,20 +102,33 @@ class Controls {
 
             if (selection_type == 'one') {
 
-                Array.from(skillsContainer.children).forEach(skill_btn => skill_btn.classList.remove('active'));
+                controls.clear_buttons();
+
                 clicked_btn.classList.toggle('active');
 
-                bubbles.skills_selected = [] 
-                bubbles.skills_selected[0] = clicked_skill;
+                controls.skills_selected = [] 
+                controls.skills_selected[0] = clicked_skill;
 
                 bubbles.chart_ref.show_axis( bubbles.chart_ref.y_axis);
                 bubbles.chart_ref.show_axis( bubbles.chart_ref.x_axis);
 
             }
 
-            console.log(bubbles.skills_selected);
+            if (selection_type == 'two') {
 
-            bubbles.move_bubbles(bubbles.skills_selected);
+                controls.skills_selected.push(clicked_skill);
+                controls.skills_selected.splice(0, controls.skills_selected.length-2);
+
+                controls.clear_buttons();
+                controls.match_buttons_to_skill_selection();
+
+                console.log('to aqui');
+
+            }
+
+            console.log(controls.skills_selected);
+
+            bubbles.move_bubbles(controls.skills_selected);
 
         }
 
@@ -117,9 +136,34 @@ class Controls {
 
     }
 
-    radio_change(e) {
+    radio_change(e, controls) {
 
-        this.selection_type = e.target.value;
+        controls.selection_type = e.target.value;
+        console.log(e.target.value, controls.selection_type);
+
+    }
+
+    clear_buttons() {
+
+        // que interessante, aqui ele usa a referência certa ao "this"!
+        //console.log(this.ref);
+
+        Array.from(this.ref.children).forEach(skill_btn => skill_btn.classList.remove('active'));
+
+    }
+
+    match_buttons_to_skill_selection() {
+
+        console.log('ok, me chamaram', this.skills_selected);
+
+        this.skills_selected.forEach(skill => {
+            
+            const btn_skill = document.querySelector(`[data-name="${skill}"]`);
+            btn_skill.classList.add('active');
+
+            console.log(skill, btn_skill);
+            
+        });
 
     }
 
@@ -129,8 +173,6 @@ class Bubbles {
 
     ref;
     chart_ref;
-
-    skills_selected = [];
 
     constructor(chart, data) {
 
