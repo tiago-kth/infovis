@@ -194,16 +194,48 @@ class Bubbles {
         this.ref = d3.select('.vis').selectAll('path.data-point').data(data).join('path')
               .classed('data-point', true)
               .attr('data-id', (d,i) => i)
-              .attr('d', this.generate_path(chart.r))
+              .attr('data-alias', d => d.alias)
+              .attr('d', this.generate_path_circle(chart.r))
             ;
 
         this.chart_ref = chart;
 
     }
 
-    generate_path(r) {
+    generate_path_circle(r) {
 
         return `M-${r},0A${r},${r},0,1,1,${r},0A${r},${r},0,1,1,-${r},0Z`
+
+    }
+
+    generate_path_line(skills, data_point) {
+
+        let d = '';
+        const gap = this.chart_ref.gap;
+
+        skills.forEach( (skill, i) => {
+
+            const x = this.chart_ref.x_pc(skill);
+            const y = this.chart_ref.y(data_point[skill]) - gap;
+
+            const command = i == 0 ? 'M' : 'L';
+
+            d += `${command}${x},${y} `;
+
+        })
+
+        skills.reverse().forEach( skill => {
+
+            const x = this.chart_ref.x_pc(skill);
+            const y = this.chart_ref.y(data_point[skill]) + gap;
+
+            d += `L${x},${y} `;
+
+        })
+
+        d += 'Z' // to close the path;
+
+        return d;
 
     }
 
@@ -251,6 +283,32 @@ class Bubbles {
                 ${this.chart_ref.x_scatter(d[skills[0]])},
                 ${this.chart_ref.y(d[skills[1]])})`
             )
+        }
+
+        if (skills.length > 2) {
+
+            this.chart_ref.update_scale_pc(skills);
+
+            this.ref
+              .transition()
+              .duration(500)
+              .attrTween('d', data_point => {
+
+                const current_path = d3.select(`[data-alias="${data_point.alias}"]`).node().getAttribute('d');
+                const next_path = this.generate_path_line(skills, data_point);
+
+                console.log(current_path, next_path);
+
+                return flubber.interpolate(
+                    current_path,
+                    next_path
+                )
+
+              })
+              .attr('transform', 'translate(0,0)')
+            ;
+
+
         }
         
     }
@@ -328,8 +386,14 @@ class Chart {
         this.y_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin + (this.data_params.max_rank) * this.r * 2 + (this.data_params.max_rank) * this.gap, this.margin]);
         this.x_hist = d3.scaleLinear().domain([0,10]).range([this.margin, 10 * this.r * 2 + 10 * this.gap + this.margin]);
         this.x_scatter = d3.scaleLinear().domain([0,10]).range([this.margin, this.w - this.margin]);
-        this.y = d3.scaleLinear().domain([0,10]).range([this.h - this.margin, this.margin])
+        this.y = d3.scaleLinear().domain([0,10]).range([this.h - this.margin, this.margin]);
 
+        this.x_pc = d3.scalePoint().domain([]).range([this.margin, this.w - this.margin]);
+
+    }
+
+    update_scale_pc(skills) {
+        this.x_pc.domain(skills);
     }
 
     make_axis() {
