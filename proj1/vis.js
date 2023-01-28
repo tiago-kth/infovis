@@ -109,9 +109,6 @@ class Controls {
                 controls.skills_selected = [] 
                 controls.skills_selected[0] = clicked_skill;
 
-                bubbles.chart_ref.show_axis( bubbles.chart_ref.y_axis);
-                bubbles.chart_ref.show_axis( bubbles.chart_ref.x_axis);
-
             }
 
             if (selection_type == 'two') {
@@ -121,8 +118,6 @@ class Controls {
 
                 controls.clear_buttons();
                 controls.match_buttons_to_skill_selection();
-
-                console.log('to aqui');
 
             }
 
@@ -192,6 +187,22 @@ class Bubbles {
 
         if (skills.length == 1) {
 
+            if (this.chart_ref.chart_mode == 'none') {
+
+                this.chart_ref.show_axis( this.chart_ref.y_axis);
+                this.chart_ref.show_axis( this.chart_ref.x_axis);
+
+                this.chart_ref.chart_mode = 'histogram';
+
+            }
+
+            if (this.chart_ref.chart_mode == 'scatter') {
+
+                this.chart_ref.chart_mode = 'histogram';
+                this.chart_ref.update_axis();
+
+            }
+
             const skill = skills[0];
 
             this.ref
@@ -200,6 +211,22 @@ class Bubbles {
                 ${this.chart_ref.y_hist(d['rank_' + skill])})`
             )
 
+        }
+
+        if (skills.length == 2) {
+
+            if (this.chart_ref.chart_mode != 'scatter') {
+
+                this.chart_ref.chart_mode = 'scatter';
+                this.chart_ref.update_axis();
+
+            }
+
+            this.ref
+            .attr('transform', d => `translate(
+                ${this.chart_ref.x_scatter(d[skills[0]])},
+                ${this.chart_ref.y(d[skills[1]])})`
+            )
         }
         
     }
@@ -246,6 +273,8 @@ class Chart {
 
     cont = document.querySelector('.vis-container');
 
+    chart_mode = 'none'; // 'histogram', 'scatter', 'parallel coordinates'
+
     constructor(data) {
 
         this.data_params.max_rank = data.max_rank;
@@ -274,8 +303,8 @@ class Chart {
 
         this.y_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin + (this.data_params.max_rank) * this.r * 2 + (this.data_params.max_rank) * this.gap, this.margin]);
         this.x_hist = d3.scaleLinear().domain([0,10]).range([this.margin, 10 * this.r * 2 + 10 * this.gap + this.margin]);
-        this.x_scatter = d3.scaleLinear().domain([1,10]).range([this.margin, this.w - this.margin]);
-        this.y = d3.scaleLinear().domain([1,10]).range([this.h - this.margin, this.margin])
+        this.x_scatter = d3.scaleLinear().domain([0,10]).range([this.margin, this.w - this.margin]);
+        this.y = d3.scaleLinear().domain([0,10]).range([this.h - this.margin, this.margin])
 
     }
 
@@ -311,10 +340,31 @@ class Chart {
 
     update_axis() {
 
-        this.y_axis
+        let x_axis, y_axis, translation;
+
+        if (this.chart_mode == 'scatter') {
+
+            x_axis = d3.axisBottom(this.x_scatter);
+            y_axis = d3.axisLeft(this.y);
+
+            translation = this.y.range()[0]
+
+        }
+
+        if (this.chart_mode == 'histogram') {
+
+            x_axis = d3.axisBottom(this.x_hist);
+            y_axis = d3.axisLeft(this.y_hist);
+
+            translation = this.y_hist.range()[0]
+
+        }
+
+        this.x_axis
           .transition()
           .duration(500)
-          .call(y_axis)
+          .attr('transform', `translate(0,${translation})`)
+          .call(x_axis)
         ;
 
         this.y_axis
