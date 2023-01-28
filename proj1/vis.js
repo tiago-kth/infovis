@@ -103,6 +103,7 @@ class Controls {
                 bubbles.skills_selected[0] = clicked_skill;
 
                 bubbles.chart_ref.show_axis( bubbles.chart_ref.y_axis);
+                bubbles.chart_ref.show_axis( bubbles.chart_ref.x_axis);
 
             }
 
@@ -203,8 +204,8 @@ class Bubbles {
 
             this.ref
             .attr('transform', d => `translate(
-                ${this.chart_ref.x_hist(d['rank_' + skill])},
-                ${this.chart_ref.y_hist(d[skill])})`
+                ${this.chart_ref.x_hist(d[skill])},
+                ${this.chart_ref.y_hist(d['rank_' + skill])})`
             )
 
         }
@@ -279,8 +280,8 @@ class Chart {
 
         this.get_sizes();
 
-        this.x_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin, this.margin + (this.data_params.max_rank) * this.r * 2 + (this.data_params.max_rank) * this.gap]);
-        this.y_hist = d3.scaleLinear().domain([1,10]).range([9 * this.r * 2 + 9 * this.gap + this.margin, this.margin]);
+        this.y_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin + (this.data_params.max_rank) * this.r * 2 + (this.data_params.max_rank) * this.gap, this.margin]);
+        this.x_hist = d3.scaleLinear().domain([0,10]).range([this.margin, 10 * this.r * 2 + 10 * this.gap + this.margin]);
         this.x_scatter = d3.scaleLinear().domain([1,10]).range([this.margin, this.w - this.margin]);
         this.y = d3.scaleLinear().domain([1,10]).range([this.h - this.margin, this.margin])
 
@@ -288,20 +289,16 @@ class Chart {
 
     make_axis() {
 
-        //const x_axis = d3.axisBottom(this.x);
+        const x_axis = d3.axisBottom(this.x_hist);
         const y_axis = d3.axisLeft(this.y_hist);
-
-        /*
 
         this.x_axis = this.svg
           .append('g')
           .classed('axis', true)
           .classed('hidden', true)
-          .attr('transform', `translate(0,${this.margin})`)
+          .attr('transform', `translate(0,${this.y_hist.range()[0]})`)
           .call(x_axis)
         ;
-
-        */
 
         this.y_axis = this.svg
           .append('g')
@@ -320,7 +317,13 @@ class Chart {
 
     }
 
-    update_y_axis() {
+    update_axis() {
+
+        this.y_axis
+          .transition()
+          .duration(500)
+          .call(y_axis)
+        ;
 
         this.y_axis
           .transition()
