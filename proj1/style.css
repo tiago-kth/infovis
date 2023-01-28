@@ -60,3 +60,15 @@ circle.data-point {
 
     transition: transform .5s;
 }
+
+.axis {
+
+    transition: opacity .5s;
+
+}
+
+.axis.hidden {
+
+    opacity: 0;
+
+}

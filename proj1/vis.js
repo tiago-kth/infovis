@@ -16,7 +16,7 @@ function init() {
             const bubbles = new Bubbles(chart, data.main_data);
             const controls = new Controls(skills, bubbles);
 
-            console.log(chart.ref);
+            console.log(chart, chart.x_hist.range(), chart.y_hist.range());
 
             /*
             const bubbles = data.main_data.map((datum, i) => {
@@ -101,6 +101,8 @@ class Controls {
 
                 bubbles.skills_selected = [] 
                 bubbles.skills_selected[0] = clicked_skill;
+
+                bubbles.chart_ref.show_axis( bubbles.chart_ref.y_axis);
 
             }
 
@@ -220,19 +222,34 @@ class Chart {
 
     r = 10;
 
-    margin = 20;
-    gap = 2;
+    margin = 30;
+    gap = 1;
 
-    x_hist;
+    axis = [
+
+        {
+            y_hist : null
+        },
+
+    ]
+
+    // scales
     y_hist;
+    x_hist;
+    x_scatter;
+    y;
+    x_pc;
 
     data_params = {
         max_rank : null
     }
 
-
+    x_axis;
+    y_axis;
 
     ref = document.querySelector('.vis');
+
+    svg = d3.select('.vis');
 
     cont = document.querySelector('.vis-container');
 
@@ -241,16 +258,20 @@ class Chart {
         this.data_params.max_rank = data.max_rank;
 
         this.make_scales();
+        this.make_axis();
 
         console.log(this.w, this.h);
         console.log(this.x_hist(10));
+
 
     }
 
     get_sizes() {
 
-        this.w = +window.getComputedStyle(this.cont).width.slice(0,-2);
+        this.w = +window.getComputedStyle(this.ref).width.slice(0,-2);
         this.h = +window.getComputedStyle(this.cont).height.slice(0,-2);
+
+        this.ref.setAttribute('viewBox', `0 0 ${this.w} ${this.h}`);
 
     }
 
@@ -258,8 +279,54 @@ class Chart {
 
         this.get_sizes();
 
-        this.x_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin, this.data_params.max_rank * this.r * 2 + (this.data_params.max_rank - 1) * this.gap]);
-        this.y_hist = d3.scaleLinear().domain([1,10]).range([10 * this.r * 2 + 9 * this.gap, this.margin]);
+        this.x_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin, this.margin + (this.data_params.max_rank) * this.r * 2 + (this.data_params.max_rank) * this.gap]);
+        this.y_hist = d3.scaleLinear().domain([1,10]).range([9 * this.r * 2 + 9 * this.gap + this.margin, this.margin]);
+        this.x_scatter = d3.scaleLinear().domain([1,10]).range([this.margin, this.w - this.margin]);
+        this.y = d3.scaleLinear().domain([1,10]).range([this.h - this.margin, this.margin])
+
+    }
+
+    make_axis() {
+
+        //const x_axis = d3.axisBottom(this.x);
+        const y_axis = d3.axisLeft(this.y_hist);
+
+        /*
+
+        this.x_axis = this.svg
+          .append('g')
+          .classed('axis', true)
+          .classed('hidden', true)
+          .attr('transform', `translate(0,${this.margin})`)
+          .call(x_axis)
+        ;
+
+        */
+
+        this.y_axis = this.svg
+          .append('g')
+          .classed('axis', true)
+          .classed('hidden', true)
+          .attr('transform', `translate(${this.margin}, 0)`)
+          .call(y_axis)
+        ;
+
+    }
+
+    show_axis(axis) {
+
+        axis.classed('hidden', false)
+
+
+    }
+
+    update_y_axis() {
+
+        this.y_axis
+          .transition()
+          .duration(500)
+          .call(y_axis)
+        ;
 
     }
 
