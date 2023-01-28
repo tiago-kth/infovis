@@ -113,8 +113,28 @@ class Controls {
 
             if (selection_type == 'two') {
 
-                controls.skills_selected.push(clicked_skill);
+                if (!controls.skills_selected.includes(clicked_skill)) {
+
+                    controls.skills_selected.push(clicked_skill);
+
+                }
+
                 controls.skills_selected.splice(0, controls.skills_selected.length-2);
+                
+                controls.clear_buttons();
+                controls.match_buttons_to_skill_selection();
+
+            }
+
+            else {
+
+                console.log('aqui agora, clicado foi', clicked_skill, controls.selection_type)
+
+                if (!controls.skills_selected.includes(clicked_skill)) {
+
+                    controls.skills_selected.push(clicked_skill);
+
+                }
 
                 controls.clear_buttons();
                 controls.match_buttons_to_skill_selection();
