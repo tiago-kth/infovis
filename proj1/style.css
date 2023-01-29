@@ -143,3 +143,69 @@ svg:has(.data-point:hover) .data-point:hover {
     transform: rotate(90deg);
     transition: opacity .5s, transform .5s;
 }
+
+/* ---- TOOLTIPS --- */
+
+.vis-tooltip {
+
+    position: absolute;
+    opacity: 1;
+
+    top: 30px;
+    left: 30px;
+
+    border: 2px solid black;
+
+    padding: 1em;
+    width: 400px;
+
+    max-height: 50vh;
+
+}
+
+.tt-text {
+
+    margin: 0;
+
+}
+
+[data-tt-field="alias"] {
+
+    margin-bottom: .5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+
+}
+
+[data-tt-field="about"] {
+
+    font-size: .9rem;
+    font-weight: lighter;
+
+}
+
+.tt-mini-title {
+
+    margin-top: .5rem;
+
+}
+
+.tt-above-avg-cont,
+.tt-below-avg-cont {
+
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: .5rem;
+
+}
+
+[data-tt-skill-tag] {
+
+    padding: .2em .3em;
+    margin-right: .5em;
+    margin-bottom: .5em;
+    border: 1px solid black;
+    border-radius: .5em;
+    font-size: .9rem;
+
+}

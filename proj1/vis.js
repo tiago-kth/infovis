@@ -15,6 +15,7 @@ function init() {
             const chart = new Chart(data, skills);
             const bubbles = new Bubbles(chart, data.main_data);
             const controls = new Controls(skills, bubbles);
+            const tt = new Tooltip(chart, bubbles, data.averages, data.main_data, skills);
 
             console.log(chart, chart.x_hist.range(), chart.y_hist.range());
 
@@ -395,7 +396,95 @@ class Bubbles {
         
     }
 
+}
 
+class Tooltip {
+
+    ref = document.querySelector('.vis-tooltip');
+
+    chart;
+    bubbles;
+    avg_data = {};
+    summary_alias_skills = {};
+
+    constructor(chart, bubbles, avg_data, main_data, skills_list) {
+
+        this.chart = chart;
+        this.bubbles = bubbles;
+
+        avg_data.forEach(average => {
+
+            this.avg_data[average.skills] = average.avg;
+
+        });
+
+        main_data.forEach(person => {
+
+            const above_avg_skills = [];
+            const below_avg_skills = [];
+
+            skills_list.forEach(skill => {
+
+                if ( person[skill] >= this.avg_data[skill] ) {
+                    above_avg_skills.push(skill);
+                } else {
+                    below_avg_skills.push(skill);
+                }
+            })
+
+            this.summary_alias_skills[person.alias] = {
+
+                above : above_avg_skills,
+                below : below_avg_skills,
+                about : person.about
+
+            }
+
+
+        })
+
+        //console.log(this.avg_data, this.summary_alias_skills);
+
+        this.populate_tooltip('coldfooter');
+        
+    }
+
+    populate_tooltip(alias) {
+
+        const alias_data = this.summary_alias_skills[alias];
+
+        document.querySelector('[data-tt-field="alias"]').innerText = alias;
+        document.querySelector('[data-tt-field="about"]').innerText = alias_data.about;
+
+        const above_cont = document.querySelector('.tt-above-avg-cont');
+        const below_cont = document.querySelector('.tt-below-avg-cont');
+
+        // cleans tags
+
+        above_cont.innerHTML = '';
+        below_cont.innerHTML = '';
+
+        alias_data.above.forEach(skill => {
+
+            const new_tag = document.createElement('span');
+            new_tag.dataset.ttSkillTag = 'above';
+            new_tag.innerText = skill;
+
+            above_cont.appendChild(new_tag);
+
+        })
+
+        alias_data.below.forEach(skill => {
+
+            const new_tag = document.createElement('span');
+            new_tag.dataset.ttSkillTag = 'below';
+            new_tag.innerText = skill;
+
+            below_cont.appendChild(new_tag);
+
+        })   
+
+    }
 
 }
 

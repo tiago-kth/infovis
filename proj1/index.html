@@ -54,14 +54,31 @@
 
             </div>
 
-            <div class="vis-container">
+        </div>
 
-                <p class="vis-axis-label vis-axis-label-x vis-axis-label-hidden"></p>
-                <p class="vis-axis-label vis-axis-label-y vis-axis-label-hidden"></p>
+        <div class="vis-container">
 
-                <svg class="vis"></svg>
+            <p class="vis-axis-label vis-axis-label-x vis-axis-label-hidden"></p>
+            <p class="vis-axis-label vis-axis-label-y vis-axis-label-hidden"></p>
+
+            <div class="vis-tooltip">
+                
+                <p class="tt-text" data-tt-field="alias">name</p>
+                <p class="tt-text" data-tt-field="about">about</p>
+
+                <p class="tt-text tt-mini-title">Above average skills:</p>
+                <div class="tt-above-avg-cont">
+                    <!--spans <span data-tt-skill-tag="below/above">... -->
+                </div>
+
+                <p class="tt-text tt-mini-title">Below average skills:</p>
+                <div class="tt-below-avg-cont">
+                    <!--spans-->
+                </div>
 
             </div>
+
+            <svg class="vis"></svg>
 
         </div>
 
