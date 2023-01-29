@@ -336,6 +336,7 @@ class Bubbles {
             this.chart_ref.chart_mode = 'paralells coordinates' ;
 
             this.chart_ref.update_scale_pc(skills);
+            this.chart_ref.update_axis();
 
             this.ref
               .classed('animate', false)            
@@ -471,7 +472,6 @@ class Chart {
 
         axis.classed('hidden', false)
 
-
     }
 
     update_axis() {
@@ -493,6 +493,15 @@ class Chart {
             y_axis = d3.axisLeft(this.y_hist);
 
             translation = this.y_hist.range()[0]
+
+        }
+
+        if (this.chart_mode == 'paralells coordinates') {
+
+            x_axis = d3.axisBottom(this.x_pc);
+            y_axis = d3.axisLeft(this.y);
+
+            translation = this.y.range()[0]
 
         }
 
