@@ -266,6 +266,31 @@ class Bubbles {
 
             }
 
+            if (this.chart_ref.chart_mode == 'parallels coordinates' ) {
+
+                this.chart_ref.chart_mode = 'histogram';
+                this.chart_ref.update_axis();
+                this.chart_ref.hide_all_parallel_axis();
+
+                const d = this.generate_path_circle(this.chart_ref.r)
+
+                this.ref
+                  .transition()
+                  .duration(500)
+                  .attrTween('d', data_point => {
+                    
+                    const current_path = d3.select(`[data-alias="${data_point.alias}"]`).node().getAttribute('d');
+                    const next_path = d;
+
+                    return flubber.interpolate(
+                        current_path,
+                        next_path
+                    )
+                   })
+                ;
+
+            }
+
             const skill = skills[0];
 
             this.ref
@@ -279,7 +304,7 @@ class Bubbles {
 
         if (skills.length == 2) {
 
-            if (this.chart_ref.chart_mode == 'paralells coordinates' ) {
+            if (this.chart_ref.chart_mode == 'parallels coordinates' ) {
 
                 this.chart_ref.chart_mode = 'scatter';
                 this.chart_ref.update_axis();
@@ -331,7 +356,7 @@ class Bubbles {
 
         if (skills.length > 2) {
 
-            this.chart_ref.chart_mode = 'paralells coordinates' ;
+            this.chart_ref.chart_mode = 'parallels coordinates' ;
 
             this.chart_ref.update_scale_pc(skills);
             this.chart_ref.update_axis();
@@ -488,11 +513,13 @@ class Chart {
             x_axis = d3.axisBottom(this.x_hist);
             y_axis = d3.axisLeft(this.y_hist);
 
-            translation = this.y_hist.range()[0]
+            translation = this.y_hist.range()[0];
+
+            this.x_axis.classed('no-line', false);
 
         }
 
-        if (this.chart_mode == 'paralells coordinates') {
+        if (this.chart_mode == 'parallels coordinates') {
 
             x_axis = d3.axisBottom(this.x_pc);
             y_axis = d3.axisLeft(this.y);
