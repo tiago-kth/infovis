@@ -1,6 +1,3 @@
-// issues: com many, depois que vai clicando até deixar sem opcoes,
-// nao deixa clicar mais em nada.
-
 function init() {
 
     fetch('data.json')
@@ -105,6 +102,8 @@ class Controls {
 
             if (selection_type == 'one') {
 
+                console.log('here');
+
                 controls.clear_buttons();
 
                 clicked_btn.classList.toggle('active');
@@ -129,7 +128,7 @@ class Controls {
 
             }
 
-            else {
+            if (selection_type == 'any') {
 
                 console.log('aqui agora, clicado foi', clicked_skill, controls.selection_type)
 
@@ -273,6 +272,7 @@ class Bubbles {
             const skill = skills[0];
 
             this.ref
+            .classed('animate', true)
             .attr('transform', d => `translate(
                 ${this.chart_ref.x_hist(d[skill])},
                 ${this.chart_ref.y_hist(d['rank_' + skill])})`
