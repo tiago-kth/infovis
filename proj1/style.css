@@ -150,9 +150,7 @@ svg:has(.data-point:hover) .data-point:hover {
 
     position: absolute;
     opacity: 1;
-
-    top: 30px;
-    left: 30px;
+    background-color: khaki;
 
     border: 2px solid black;
 
@@ -161,6 +159,17 @@ svg:has(.data-point:hover) .data-point:hover {
 
     max-height: 50vh;
 
+    z-index: 3;
+
+    pointer-events: initial;
+
+    overflow-y: scroll;
+
+}
+
+.vis-tooltip.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .tt-text {
@@ -207,5 +216,23 @@ svg:has(.data-point:hover) .data-point:hover {
     border: 1px solid black;
     border-radius: .5em;
     font-size: .9rem;
+
+}
+
+.click-capture {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    
+}
+
+.click-capture.inactive {
+
+    pointer-events: none;
+
 
 }

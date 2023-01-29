@@ -13,9 +13,10 @@ function init() {
             console.log(skills);
 
             const chart = new Chart(data, skills);
-            const bubbles = new Bubbles(chart, data.main_data);
+            const tt = new Tooltip(chart, data.averages, data.main_data, skills);
+            const bubbles = new Bubbles(chart, tt, data.main_data);
             const controls = new Controls(skills, bubbles);
-            const tt = new Tooltip(chart, bubbles, data.averages, data.main_data, skills);
+            
 
             console.log(chart, chart.x_hist.range(), chart.y_hist.range());
 
@@ -199,8 +200,9 @@ class Bubbles {
 
     ref;
     chart_ref;
+    tt;
 
-    constructor(chart, data) {
+    constructor(chart, tt, data) {
 
         this.ref = d3.select('.vis').selectAll('path.data-point').data(data).join('path')
               .classed('data-point', true)
@@ -208,9 +210,11 @@ class Bubbles {
               .attr('data-id', (d,i) => i)
               .attr('data-alias', d => d.alias)
               .attr('d', this.generate_path_circle(chart.r))
+              .on('click', e => tt.show_tooltip(e, tt))
             ;
 
         this.chart_ref = chart;
+        this.tt = tt;
 
     }
 
@@ -401,16 +405,15 @@ class Bubbles {
 class Tooltip {
 
     ref = document.querySelector('.vis-tooltip');
+    click_capture = document.querySelector('.click-captur');
 
     chart;
-    bubbles;
     avg_data = {};
     summary_alias_skills = {};
 
-    constructor(chart, bubbles, avg_data, main_data, skills_list) {
+    constructor(chart, avg_data, main_data, skills_list) {
 
         this.chart = chart;
-        this.bubbles = bubbles;
 
         avg_data.forEach(average => {
 
@@ -484,6 +487,40 @@ class Tooltip {
 
         })   
 
+    }
+
+    show_tooltip(e, tt) {
+        console.log(e, e.target.__data__.alias);
+
+        const alias = e.target.__data__.alias;
+
+        tt.populate_tooltip(alias);
+
+        const tt_w = +window.getComputedStyle(tt.ref).width.slice(0,-2);
+        const tt_h = +window.getComputedStyle(tt.ref).height.slice(0,-2);
+
+        const chart_w = tt.chart.w;
+        const chart_h = tt.chart.h;
+
+        if (e.x + tt_w + 10 <= chart_w) {
+            tt.ref.style.left = (e.x + 10) + 'px';
+        } else {
+            console.log('here!!!', chart_w-e.x-10)
+            tt.ref.style.right = (chart_w - e.x + 20) + 'px';
+        }
+
+        if (e.y + tt_h + 10 <= chart_h) {
+            tt.ref.style.top = e.y
+        } else if (e.y - tt_h - 10 < 0) {
+            tt.ref.style.top = 10;
+        } else {
+            tt.ref.style.bottom = e.y - 10;
+        }
+
+        //console.log(e.x, e.y, tt_w, tt_h, chart_w, chart_h);
+
+        tt.ref.classList.remove('hidden');
+        
     }
 
 }
