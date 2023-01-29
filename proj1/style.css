@@ -2,6 +2,13 @@
     box-sizing: border-box;
 }
 
+:root {
+
+    --margin : 30px;
+    --margin-vertical : 50px;
+
+}
+
 /* -- controls ------ */
 
 .skills-container {
@@ -45,6 +52,37 @@
 .vis-container {
 
     border: 4px dotted #333;
+    position: relative;
+
+}
+
+.vis-axis-label {
+
+    position: absolute;
+    transition: .5s;
+    margin: 0;
+    min-width: max-content;
+
+}
+
+.vis-axis-label-x {
+
+    bottom: 0;
+    text-align: right;
+    height: var(--margin-vertical);
+    padding-top: .5em;
+    transform: translateX(-100%);
+
+}
+
+.vis-axis-label-y {
+
+    top: var(--margin-vertical);
+    left: var(--margin);
+    text-align: left;
+    padding-top: .5em;
+    transform: translateY(-100%);
+    height: var(--margin-vertical);
 
 }
 
@@ -87,7 +125,8 @@ svg:has(.data-point:hover) .data-point:hover {
 
 .axis.hidden,
 .axis.no-line path.domain,
-.axis.no-line .tick line {
+.axis.no-line .tick line,
+.vis-axis-label-hidden {
 
     opacity: 0;
 

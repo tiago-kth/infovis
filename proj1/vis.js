@@ -51,6 +51,8 @@ class Controls {
     selection_type = 'one';
     skills_selected = [];
 
+    first_click = false;
+
     bubbles;
 
     chart;
@@ -85,6 +87,10 @@ class Controls {
 
     update_chart(e, controls) {
 
+        if (!controls.first_click) {
+            controls.chart.show_axis_labels_histogram();
+            controls.first_click = true;
+        }
 
         console.log(controls.selection_type);
 
@@ -352,6 +358,8 @@ class Bubbles {
 
             }
 
+            this.chart_ref.show_axis_labels_scatterplot(skills);
+
         }
 
         if (skills.length > 2) {
@@ -379,6 +387,8 @@ class Bubbles {
 
               })
             ;
+
+            this.chart_ref.show_axis_labels_pc();
 
 
         }
@@ -416,6 +426,9 @@ class Chart {
     x_axis;
     y_axis;
 
+    axis_label_x;
+    axis_label_y;
+
     ref = document.querySelector('.vis');
 
     svg = d3.select('.vis');
@@ -427,6 +440,9 @@ class Chart {
     constructor(data, skills) {
 
         this.data_params.max_rank = data.max_rank;
+
+        this.axis_label_x = document.querySelector('.vis-axis-label-x');
+        this.axis_label_y = document.querySelector('.vis-axis-label-y');
 
         this.make_scales();
         this.make_axis();
@@ -493,6 +509,38 @@ class Chart {
 
     }
 
+    show_axis_labels_histogram() {
+
+        this.axis_label_x.classList.remove('vis-axis-label-hidden');
+        this.axis_label_x.innerText = 'Proficiency';
+        this.axis_label_y.classList.remove('vis-axis-label-hidden');
+        this.axis_label_y.innerText = 'Number of students';
+
+        this.axis_label_x.style.left = this.x_hist.range()[1] + 'px';
+        this.axis_label_x.style.top = this.y_hist.range()[0] + 'px';
+
+    }
+
+    show_axis_labels_scatterplot(skills) {
+
+        this.axis_label_x.classList.remove('vis-axis-label-hidden');
+        this.axis_label_x.innerText = skills[0];
+        this.axis_label_y.classList.remove('vis-axis-label-hidden');
+        this.axis_label_y.innerText = skills[1];
+
+        this.axis_label_x.style.left = this.x_scatter.range()[1] + 'px';
+        this.axis_label_x.style.top = this.y.range()[0] + 'px';
+
+    }
+
+    show_axis_labels_pc() {
+
+        this.axis_label_x.classList.add('vis-axis-label-hidden');
+        this.axis_label_y.innerText = 'Proficiency';
+
+
+    }
+
     update_axis() {
 
         let x_axis, y_axis, translation;
@@ -514,6 +562,8 @@ class Chart {
             y_axis = d3.axisLeft(this.y_hist);
 
             translation = this.y_hist.range()[0];
+
+            this.show_axis_labels_histogram();
 
             this.x_axis.classed('no-line', false);
 
