@@ -75,8 +75,21 @@
 }
 
 .axis.hidden,
-.axis.no-line path.domain {
+.axis.no-line path.domain,
+.axis.no-line .tick line {
 
     opacity: 0;
 
+}
+
+.pc-axis {
+    transition: opacity .1s, transform .5s;
+    stroke: crimson;
+    stroke-width: 2px;
+}
+
+.pc-axis.pc-axis-hidden {
+    opacity: 0;
+    transform: rotate(90deg);
+    transition: opacity .5s, transform .5s;
 }

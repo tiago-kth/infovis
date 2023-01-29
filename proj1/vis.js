@@ -12,7 +12,7 @@ function init() {
 
             console.log(skills);
 
-            const chart = new Chart(data);
+            const chart = new Chart(data, skills);
             const bubbles = new Bubbles(chart, data.main_data);
             const controls = new Controls(skills, bubbles);
 
@@ -181,8 +181,6 @@ class Controls {
             
             const btn_skill = document.querySelector(`[data-name="${skill}"]`);
             btn_skill.classList.add('active');
-
-            console.log(skill, btn_skill);
             
         });
 
@@ -285,6 +283,7 @@ class Bubbles {
 
                 this.chart_ref.chart_mode = 'scatter';
                 this.chart_ref.update_axis();
+                this.chart_ref.hide_all_parallel_axis();
 
                 const d = this.generate_path_circle(this.chart_ref.r)
 
@@ -336,6 +335,7 @@ class Bubbles {
 
             this.chart_ref.update_scale_pc(skills);
             this.chart_ref.update_axis();
+            this.chart_ref.update_parallel_axis(skills);
 
             this.ref
               .classed('animate', false)            
@@ -375,13 +375,7 @@ class Chart {
     marginY = 50;
     gap = 1;
 
-    axis = [
-
-        {
-            y_hist : null
-        },
-
-    ]
+    parallel_axis = {};
 
     // scales
     y_hist;
@@ -405,12 +399,13 @@ class Chart {
 
     chart_mode = 'none'; // 'histogram', 'scatter', 'parallel coordinates'
 
-    constructor(data) {
+    constructor(data, skills) {
 
         this.data_params.max_rank = data.max_rank;
 
         this.make_scales();
         this.make_axis();
+        this.make_parallel_axis(skills);
 
         console.log(this.w, this.h);
         console.log(this.x_hist(10));
@@ -520,6 +515,53 @@ class Chart {
           .duration(500)
           .call(y_axis)
         ;
+
+    }
+
+    make_parallel_axis(skills) {
+
+        skills.forEach(skill => {
+
+            const pc_axis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+            pc_axis.classList.add('pc-axis', 'pc-axis-hidden');
+            pc_axis.dataset.axisSkill = skill;
+            pc_axis.setAttribute('x1', this.margin);
+            pc_axis.setAttribute('x2', this.margin);
+            pc_axis.setAttribute('y1', this.marginY);
+            pc_axis.setAttribute('y2', this.y.range()[0]);
+            pc_axis.setAttribute('transform-origin', `${this.margin} ${this.y.range()[0]}`);
+
+            this.ref.appendChild(pc_axis);
+
+        })
+
+    }
+
+    hide_all_parallel_axis() {
+
+        document.querySelectorAll('.pc-axis').forEach(el => {
+            
+            el.classList.add('pc-axis-hidden');
+            el.setAttribute('transform', '');
+            
+        });
+
+    }
+
+    update_parallel_axis(skills) {
+
+        this.hide_all_parallel_axis();
+        
+        // starting from index 1, because the first skill is mapped over the regular y-axis, so no need for an extra parallel axis
+        skills.slice(1).forEach(skill => {
+
+            const pc_axis = document.querySelector(`[data-axis-skill="${skill}"]`);
+
+            pc_axis.classList.remove('pc-axis-hidden');
+            pc_axis.setAttribute('transform', `translate(${this.x_pc(skill) - this.margin}, 0)`);
+
+        })
 
     }
 
