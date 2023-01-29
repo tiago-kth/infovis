@@ -91,6 +91,7 @@ class Controls {
 
         if (!controls.first_click) {
             controls.chart.show_axis_labels_histogram();
+            controls.bubbles.ref.classed('initial', false);
             controls.first_click = true;
         }
 
@@ -207,6 +208,7 @@ class Bubbles {
         this.ref = d3.select('.vis').selectAll('path.data-point').data(data).join('path')
               .classed('data-point', true)
               .classed('animate', true)
+              .classed('initial', true)
               .attr('data-id', (d,i) => i)
               .attr('data-alias', d => d.alias)
               .attr('d', this.generate_path_circle(chart.r))
