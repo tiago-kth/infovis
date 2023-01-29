@@ -1,3 +1,6 @@
+// issues: com many, depois que vai clicando até deixar sem opcoes,
+// nao deixa clicar mais em nada.
+
 function init() {
 
     fetch('data.json')
@@ -369,6 +372,7 @@ class Chart {
     r = 10;
 
     margin = 30;
+    marginY = 50;
     gap = 1;
 
     axis = [
@@ -427,10 +431,10 @@ class Chart {
 
         this.get_sizes();
 
-        this.y_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.margin + (this.data_params.max_rank) * this.r * 2 + (this.data_params.max_rank) * this.gap, this.margin]);
+        this.y_hist = d3.scaleLinear().domain([0,this.data_params.max_rank]).range([this.marginY + (this.data_params.max_rank) * this.r * 2 + (this.data_params.max_rank) * this.gap, this.marginY]);
         this.x_hist = d3.scaleLinear().domain([0,10]).range([this.margin, 10 * this.r * 2 + 10 * this.gap + this.margin]);
         this.x_scatter = d3.scaleLinear().domain([0,10]).range([this.margin, this.w - this.margin]);
-        this.y = d3.scaleLinear().domain([0,10]).range([this.h - this.margin, this.margin]);
+        this.y = d3.scaleLinear().domain([0,10]).range([this.h - this.marginY, this.marginY]);
 
         this.x_pc = d3.scalePoint().domain([]).range([this.margin, this.w - this.margin]);
 
