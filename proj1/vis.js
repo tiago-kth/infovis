@@ -129,8 +129,6 @@ class Controls {
 
             if (selection_type == 'any') {
 
-                console.log('aqui agora, clicado foi', clicked_skill, controls.selection_type)
-
                 if (!controls.skills_selected.includes(clicked_skill)) {
 
                     controls.skills_selected.push(clicked_skill);
@@ -222,7 +220,9 @@ class Bubbles {
         let d = '';
         const gap = this.chart_ref.gap;
 
-        skills.forEach( (skill, i) => {
+        const skills_copy = [...skills]; // makes a copy to avoid messing up the original array order with the reverse method below
+
+        skills_copy.forEach( (skill, i) => {
 
             const x = this.chart_ref.x_pc(skill).toPrecision(4);
             const y = (this.chart_ref.y(data_point[skill]) - gap).toPrecision(4);
@@ -233,7 +233,7 @@ class Bubbles {
 
         })
 
-        skills.reverse().forEach( skill => {
+        skills_copy.reverse().forEach( skill => {
 
             const x = this.chart_ref.x_pc(skill).toPrecision(4);
             const y = (this.chart_ref.y(data_point[skill]) + gap).toPrecision(4);
