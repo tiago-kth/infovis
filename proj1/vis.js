@@ -134,6 +134,13 @@ class Controls {
 
                     controls.skills_selected.push(clicked_skill);
 
+                } else {
+
+                    const index = controls.skills_selected.indexOf(clicked_skill);
+                    console.log(index, clicked_skill);
+
+                    controls.skills_selected.splice(index, 1);
+
                 }
 
                 controls.clear_buttons();
@@ -336,8 +343,6 @@ class Bubbles {
 
                 const current_path = d3.select(`[data-alias="${data_point.alias}"]`).node().getAttribute('d');
                 const next_path = this.generate_path_line(skills, data_point);
-
-                console.log(current_path, next_path);
 
                 return flubber.interpolate(
                     current_path,

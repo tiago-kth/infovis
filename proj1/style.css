@@ -56,6 +56,12 @@
 
 }
 
+.data-point {
+
+    opacity: .5;
+
+}
+
 .data-point.animate {
 
     transition: transform .5s;
