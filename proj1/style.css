@@ -62,6 +62,17 @@
 
 }
 
+svg:has(.data-point:hover) .data-point {
+    opacity: .1;
+}
+
+svg:has(.data-point:hover) .data-point:hover {
+
+    opacity: 1;
+    stroke-width: 1px;
+    stroke: blue;
+}
+
 .data-point.animate,
 .axis path.domain {
 
