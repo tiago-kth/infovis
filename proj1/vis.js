@@ -78,18 +78,17 @@ class Controls {
 
     monitor() {
 
-        this.ref.addEventListener('click', e => this.on_click(e, this));
+        this.ref.addEventListener('click', e => this.update_chart(e, this));
         this.ref_radio.addEventListener('change', e => this.radio_change(e, this));
 
     }
 
-    on_click(e, controls) {
+    update_chart(e, controls) {
 
 
         console.log(controls.selection_type);
 
         const selection_type = controls.selection_type;
-        const skillsContainer = controls.ref;
         const bubbles = controls.bubbles;
 
         if (e.target.tagName == 'BUTTON') {
@@ -483,7 +482,9 @@ class Chart {
             x_axis = d3.axisBottom(this.x_scatter);
             y_axis = d3.axisLeft(this.y);
 
-            translation = this.y.range()[0]
+            translation = this.y.range()[0];
+
+            this.x_axis.classed('no-line', false);
 
         }
 
@@ -501,7 +502,9 @@ class Chart {
             x_axis = d3.axisBottom(this.x_pc);
             y_axis = d3.axisLeft(this.y);
 
-            translation = this.y.range()[0]
+            translation = this.y.range()[0];
+
+            this.x_axis.classed('no-line', true);
 
         }
 

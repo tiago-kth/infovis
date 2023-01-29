@@ -62,7 +62,8 @@
 
 }
 
-.data-point.animate {
+.data-point.animate,
+.axis path.domain {
 
     transition: transform .5s;
 }
@@ -73,7 +74,8 @@
 
 }
 
-.axis.hidden {
+.axis.hidden,
+.axis.no-line path.domain {
 
     opacity: 0;
 
