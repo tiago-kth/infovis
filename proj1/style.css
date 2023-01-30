@@ -235,7 +235,7 @@ svg:has(.data-point:hover) .data-point:hover {
 
     pointer-events: initial;
 
-    overflow-y: scroll;
+    overflow-y: auto;
 
     box-shadow: 3px 3px var(--txt-color);
 

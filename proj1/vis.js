@@ -6,11 +6,11 @@ function init() {
 
         data => {
             
-            console.log(data);
+            //console.log(data);
 
             const skills = data.averages.map(d => d.skills);
 
-            console.log(skills);
+            //console.log(skills);
 
             const chart = new Chart(data, skills);
             const tt = new Tooltip(chart, data.averages, data.main_data, skills);
@@ -18,7 +18,7 @@ function init() {
             const controls = new Controls(skills, bubbles, tt);
             
 
-            console.log(chart, chart.x_hist.range(), chart.y_hist.range());
+            //console.log(chart, chart.x_hist.range(), chart.y_hist.range());
 
             /*
             const bubbles = data.main_data.map((datum, i) => {
@@ -35,7 +35,7 @@ function init() {
 
 
 
-            console.log(bubbles);
+            //console.log(bubbles);
 
 
         }
@@ -100,7 +100,7 @@ class Controls {
 
         controls.tt.hide_tooltip(e, controls.tt);
 
-        console.log(controls.selection_type);
+        //console.log(controls.selection_type);
 
         const selection_type = controls.selection_type;
         const bubbles = controls.bubbles;
@@ -111,11 +111,11 @@ class Controls {
 
             const clicked_skill = clicked_btn.dataset.name;
 
-            console.log(`skill clicada: ${clicked_skill}`);
+            //console.log(`skill clicada: ${clicked_skill}`);
 
             if (selection_type == 'one') {
 
-                console.log('here');
+                //console.log('here');
 
                 controls.clear_buttons();
 
@@ -150,7 +150,7 @@ class Controls {
                 } else {
 
                     const index = controls.skills_selected.indexOf(clicked_skill);
-                    console.log(index, clicked_skill);
+                    //console.log(index, clicked_skill);
 
                     controls.skills_selected.splice(index, 1);
 
@@ -161,7 +161,7 @@ class Controls {
 
             }
 
-            console.log(controls.skills_selected);
+            //console.log(controls.skills_selected);
 
             bubbles.move_bubbles(controls.skills_selected);
 
@@ -190,7 +190,7 @@ class Controls {
 
     match_buttons_to_skill_selection() {
 
-        console.log('ok, me chamaram', this.skills_selected);
+        //console.log('ok, me chamaram', this.skills_selected);
 
         this.skills_selected.forEach(skill => {
             
@@ -536,7 +536,7 @@ class Tooltip {
                 tt.ref.style.left = (e.x + 10) + 'px';
             } else {
     
-                console.log('here!!!', chart_w-e.x-10);
+                //console.log('here!!!', chart_w-e.x-10);
                 tt.ref.style.left = '';
                 tt.ref.style.right = (chart_w - e.x + 20) + 'px';
             }
@@ -615,8 +615,8 @@ class Chart {
         this.make_axis();
         this.make_parallel_axis(skills);
 
-        console.log(this.w, this.h);
-        console.log(this.x_hist(10));
+        //console.log(this.w, this.h);
+        //console.log(this.x_hist(10));
 
 
     }
@@ -718,11 +718,11 @@ class Chart {
           .reduce( (pv, cv) => pv + cv)
         ;
 
-        console.log(total_w_labels, this.w, 0.75 * this.w);
+        //console.log(total_w_labels, this.w, 0.75 * this.w);
 
         if (total_w_labels > 0.6 * (this.w - 2*this.margin)) {
 
-            console.log('teste ok!')
+            //console.log('teste ok!')
             x_labels.forEach( (label, i) => {
 
                 if (i % 2 != 0) {
