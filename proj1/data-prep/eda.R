@@ -10,6 +10,7 @@ tema <-   theme_minimal() +
 
 data_raw <- read.csv('proj1-data.csv')
 
+
 data <- data_raw
 colnames(data) <- c(
   'Timestamp',
@@ -35,8 +36,10 @@ data_long <- data %>%
   gather(-id, key = skill, value = value)
 
 data_long_all <- data %>%
-  select(-Timestamp, -about) %>%
-  gather(-alias, key = skill, value = value)
+  select(-Timestamp) %>%
+  gather(-alias, -about, key = skill, value = value)
+
+write.csv(data_long_all, 'data-long.csv')
 
 data_avg <- data %>%
   select(-Timestamp) %>%
