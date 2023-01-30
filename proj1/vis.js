@@ -398,6 +398,7 @@ class Bubbles {
             this.chart_ref.update_scale_pc(skills);
             this.chart_ref.update_axis();
             this.chart_ref.update_parallel_axis(skills);
+            //this.chart_ref.adjust_pc_labels();
 
             this.ref
               .classed('animate', false)            
@@ -526,14 +527,22 @@ class Tooltip {
         const chart_w = tt.chart.w;
         const chart_h = tt.chart.h;
 
-        if (e.x + tt_w + 10 <= chart_w) {
-            tt.ref.style.right = '';
-            tt.ref.style.left = (e.x + 10) + 'px';
+        if (chart_w/2 <= tt_w) {
+            tt.ref.style.left = 20;
         } else {
-            console.log('here!!!', chart_w-e.x-10);
-            tt.ref.style.left = '';
-            tt.ref.style.right = (chart_w - e.x + 20) + 'px';
+
+            if (e.x + tt_w + 10 <= chart_w) {
+                tt.ref.style.right = '';
+                tt.ref.style.left = (e.x + 10) + 'px';
+            } else {
+    
+                console.log('here!!!', chart_w-e.x-10);
+                tt.ref.style.left = '';
+                tt.ref.style.right = (chart_w - e.x + 20) + 'px';
+            }
+
         }
+
 
         if (e.y + tt_h + 10 <= chart_h) {
             tt.ref.style.top = e.y
@@ -564,7 +573,7 @@ class Chart {
 
     r = 10;
 
-    margin = 30;
+    margin = 35;
     marginY = 50;
     gap = 1;
 
@@ -646,6 +655,7 @@ class Chart {
         this.x_axis = this.svg
           .append('g')
           .classed('axis', true)
+          .classed('x-axis', true)
           .classed('hidden', true)
           .attr('transform', `translate(0,${this.y_hist.range()[0]})`)
           .call(x_axis)
@@ -695,6 +705,33 @@ class Chart {
 
         this.axis_label_x.classList.add('vis-axis-label-hidden');
         this.axis_label_y.innerText = 'Proficiency';
+
+
+    }
+
+    adjust_pc_labels() {
+
+        const x_labels = document.querySelectorAll('.x-axis text');
+
+        const total_w_labels = Array.from(x_labels)
+          .map(label => label.getBoundingClientRect().width)
+          .reduce( (pv, cv) => pv + cv)
+        ;
+
+        console.log(total_w_labels, this.w, 0.75 * this.w);
+
+        if (total_w_labels > 0.6 * (this.w - 2*this.margin)) {
+
+            console.log('teste ok!')
+            x_labels.forEach( (label, i) => {
+
+                if (i % 2 != 0) {
+                    label.setAttribute('y', 30);
+                }
+
+            })
+        }
+
 
 
     }

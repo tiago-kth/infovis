@@ -241,6 +241,33 @@ svg:has(.data-point:hover) .data-point:hover {
 
 }
 
+@media (max-width:1000px) {
+
+    .vis-tooltip {
+
+        font-size: .9rem;
+    }
+
+    .vis text {
+        font-size: .7rem;
+    }
+    
+}
+
+@media (max-width:600px) {
+
+    .vis-tooltip {
+
+        font-size: .8rem;
+        width: 300px;
+    }
+
+    .vis text {
+        font-size: .6rem;
+    }
+    
+}
+
 .vis-tooltip.hidden {
     opacity: 0;
     pointer-events: none;
@@ -254,8 +281,8 @@ svg:has(.data-point:hover) .data-point:hover {
 
 [data-tt-field="alias"] {
 
-    margin-bottom: .5rem;
-    font-size: 1.2rem;
+    margin-bottom: .5em;
+    font-size: 1.2em;
     font-weight: bold;
     color: var(--points);
 
@@ -263,14 +290,14 @@ svg:has(.data-point:hover) .data-point:hover {
 
 [data-tt-field="about"] {
 
-    font-size: .9rem;
+    font-size: .9em;
     font-weight: lighter;
 
 }
 
 .tt-mini-title {
 
-    margin-top: .5rem;
+    margin-top: .5em;
 
 }
 
@@ -279,7 +306,7 @@ svg:has(.data-point:hover) .data-point:hover {
 
     display: flex;
     flex-wrap: wrap;
-    margin-top: .5rem;
+    margin-top: .5em;
 
 }
 
@@ -291,7 +318,7 @@ svg:has(.data-point:hover) .data-point:hover {
     margin-bottom: .5em;
     /*border: 1px solid black;*/
     border-radius: .5em;
-    font-size: .9rem;
+    font-size: .9em;
 
 }
 
