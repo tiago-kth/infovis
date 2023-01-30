@@ -15,7 +15,7 @@ function init() {
             const chart = new Chart(data, skills);
             const tt = new Tooltip(chart, data.averages, data.main_data, skills);
             const bubbles = new Bubbles(chart, tt, data.main_data);
-            const controls = new Controls(skills, bubbles);
+            const controls = new Controls(skills, bubbles, tt);
             
 
             console.log(chart, chart.x_hist.range(), chart.y_hist.range());
@@ -59,11 +59,14 @@ class Controls {
 
     chart;
 
-    constructor(skills, bubbles) {
+    tt;
+
+    constructor(skills, bubbles, tt) {
 
         const cont = this.ref;
         this.bubbles = bubbles;
         this.chart = bubbles.chart_ref;
+        this.tt = tt;
 
         skills.forEach(skill => {
 
@@ -94,6 +97,8 @@ class Controls {
             controls.bubbles.ref.classed('initial', false);
             controls.first_click = true;
         }
+
+        controls.tt.hide_tooltip(e, controls.tt);
 
         console.log(controls.selection_type);
 
@@ -168,8 +173,9 @@ class Controls {
 
     radio_change(e, controls) {
 
+        controls.tt.hide_tooltip(e, controls.tt);
         controls.selection_type = e.target.value;
-        console.log(e.target.value, controls.selection_type);
+        //console.log(e.target.value, controls.selection_type);
 
     }
 
@@ -212,8 +218,24 @@ class Bubbles {
               .attr('data-id', (d,i) => i)
               .attr('data-alias', d => d.alias)
               .attr('d', this.generate_path_circle(chart.r))
-              .on('click', e => tt.show_tooltip(e, tt))
+              //.on('click', e => tt.show_tooltip(e, tt))
             ;
+
+        d3.select('.vis').on('click', e => {
+
+            //console.log(e);
+
+            if (e.target.classList.contains('data-point')) {
+
+                tt.show_tooltip(e, tt);
+
+            } else {
+
+                tt.hide_tooltip(e, tt);
+
+            }
+
+        })
 
         this.chart_ref = chart;
         this.tt = tt;
@@ -492,7 +514,7 @@ class Tooltip {
     }
 
     show_tooltip(e, tt) {
-        console.log(e, e.target.__data__.alias);
+        //console.log(e, e.target.__data__.alias);
 
         const alias = e.target.__data__.alias;
 
@@ -523,6 +545,12 @@ class Tooltip {
 
         tt.ref.classList.remove('hidden');
         
+    }
+
+    hide_tooltip(e, tt) {
+
+        tt.ref.classList.add('hidden');
+
     }
 
 }
