@@ -527,9 +527,11 @@ class Tooltip {
         const chart_h = tt.chart.h;
 
         if (e.x + tt_w + 10 <= chart_w) {
+            tt.ref.style.right = '';
             tt.ref.style.left = (e.x + 10) + 'px';
         } else {
-            console.log('here!!!', chart_w-e.x-10)
+            console.log('here!!!', chart_w-e.x-10);
+            tt.ref.style.left = '';
             tt.ref.style.right = (chart_w - e.x + 20) + 'px';
         }
 
