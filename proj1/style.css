@@ -6,7 +6,26 @@
 
     --margin : 30px;
     --margin-vertical : 50px;
+    font-family: 'Rubik';
 
+}
+
+h1 {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.1rem;
+    text-align: center;
+    font-weight: 600;
+    margin-top: 1.5rem;
+}
+
+p.note {
+    font-weight: 300;
+    margin-top: -.5rem;
+    text-align: center;
 }
 
 /* -- controls ------ */
@@ -17,7 +36,7 @@
     justify-content: center;
     flex-wrap: wrap;
 
-    max-width: 800px;
+    max-width: 600px;
     width: 90vw;
 
     margin: 1rem auto;
@@ -32,11 +51,17 @@
     border: 1px solid #333;
     border-radius: 1em;
 
-    font-size: 1.1rem;
+    font-size: .9rem;
 
     background-color: ghostwhite;
 
     transition: all .2s;
+}
+
+.skill-button:hover {
+
+    border-color: crimson;
+
 }
 
 .skill-button.active {
@@ -46,13 +71,24 @@
     box-shadow: 0px 0px 0px 2px crimson;
 
 }
+/* -- controls - radio -- */
 
+.control-type {
+
+    display: flex;
+    justify-content: space-around;
+    max-width: 800px;
+    margin: 0 auto;
+
+}
 /* -- vis ---- */
 
 .vis-container {
 
     border: 4px dotted #333;
     position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
 
 }
 
@@ -62,6 +98,7 @@
     transition: .5s;
     margin: 0;
     min-width: max-content;
+    font-weight: 300;
 
 }
 
@@ -70,7 +107,7 @@
     bottom: 0;
     text-align: right;
     height: var(--margin-vertical);
-    padding-top: .5em;
+    padding-top: 1em;
     transform: translateX(-100%);
 
 }
@@ -92,6 +129,11 @@
     width: 100%;
     height: 400px;
 
+}
+
+.vis text {
+    font-family: Rubik;
+    font-size: .8rem;
 }
 
 .data-point {

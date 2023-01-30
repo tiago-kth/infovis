@@ -674,7 +674,7 @@ class Chart {
         this.axis_label_y.classList.remove('vis-axis-label-hidden');
         this.axis_label_y.innerText = 'Number of students';
 
-        this.axis_label_x.style.left = this.x_hist.range()[1] + 'px';
+        this.axis_label_x.style.left = (this.x_hist.range()[1] + this.margin) + 'px';
         this.axis_label_x.style.top = this.y_hist.range()[0] + 'px';
 
     }

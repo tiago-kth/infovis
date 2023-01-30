@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IVis Project 1 - Tiago</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,100;1,100&family=Rubik:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
         <h1>
-            Exploring student data 
+            Exploring Information Visualization students' skills
         </h1>
     </header>
 
@@ -19,29 +22,30 @@
 
         <div class="controls">
 
-            <h2>Please select how you want to compare:</h2>
+            <h2>Please select how you want to explore:</h2>
 
             <div class="control-type">
 
                 <div>
                     <input type="radio" id="radio-one" name="control-type" value="one"
                             checked>
-                    <label for="radio-one">One skill at a time</label>
+                    <label for="radio-one">One skill at a time (<em>histogram</em>)</label>
                 </div>
             
                 <div>
                     <input type="radio" id="radio-two" name="control-type" value="two">
-                    <label for="radio-two">Two skills at a time</label>
+                    <label for="radio-two">Two skills at a time (<em>scatterplot</em>)</label>
                 </div>
             
                 <div>
                     <input type="radio" id="radio-any" name="control-type" value="any">
-                    <label for="any">Any number of skills</label>
+                    <label for="any">Any number of skills (dynamic)</label>
                 </div>
                 
             </div>
 
-            <h2>Select the skills</h2>
+            <h2>Select the skills by clicking on the buttons below</h2>
+            <p class="note">In the "any number of skills" mode, clicking on an already selected skill will de-select it.</p>
 
             <div class="skills-container">
 
