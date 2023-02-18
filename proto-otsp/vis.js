@@ -1,4 +1,4 @@
-fetch('../data.json').then(response => response.json()).then(vis);
+fetch('data.json').then(response => response.json()).then(vis);
 
 const cont = document.querySelector('.vis-container');
 let a = d3.select(cont);
